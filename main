@@ -1,0 +1,89 @@
+# Простий додаток для управління списком завдань
+
+# Клас Task для зберігання завдань
+class Task
+  attr_accessor :description, :completed
+
+  def initialize(description)
+    @description = description
+    @completed = false
+  end
+
+  def complete!
+    @completed = true
+  end
+
+  def to_s
+    status = completed ? "[X]" : "[ ]"
+    "#{status} #{description}"
+  end
+end
+
+# Основний клас для додатка
+class TodoApp
+  def initialize
+    @tasks = []
+  end
+
+  def add_task(description)
+    @tasks << Task.new(description)
+    puts "Завдання додано: '#{description}'"
+  end
+
+  def list_tasks
+    if @tasks.empty?
+      puts "Список завдань порожній."
+    else
+      puts "Ваші завдання:"
+      @tasks.each_with_index do |task, index|
+        puts "#{index + 1}. #{task}"
+      end
+    end
+  end
+
+  def complete_task(index)
+    if index > 0 && index <= @tasks.size
+      @tasks[index - 1].complete!
+      puts "Завдання #{index} виконано."
+    else
+      puts "Неправильний номер завдання."
+    end
+  end
+
+  def run
+    loop do
+      puts "\nЩо ви хочете зробити?"
+      puts "1. Додати завдання"
+      puts "2. Показати список завдань"
+      puts "3. Позначити завдання як виконане"
+      puts "4. Вийти"
+      print "Ваш вибір: "
+      choice = gets.to_i
+
+      case choice
+      when 1
+        print "Введіть опис завдання: "
+        description = gets.chomp
+        add_task(description)
+      when 2
+        list_tasks
+      when 3
+        print "Введіть номер завдання: "
+        index = gets.to_i
+        complete_task(index)
+      when 4
+        puts "До побачення!"
+        break
+      else
+        puts "Невірний вибір. Спробуйте ще раз."
+      end
+    end
+  end
+end
+
+# Запуск програми
+app = TodoApp.new
+app.run
+
+
+
